@@ -1,0 +1,12 @@
+/.metadata/
+.jxbrowser.userdata/
+RemoteSystemsTempFiles/
+dvt/
+TivaAlarmClock/Debug/
+
+*.log
+*.dep
+*.map
+*.bin
+*.hex
+*.obj
