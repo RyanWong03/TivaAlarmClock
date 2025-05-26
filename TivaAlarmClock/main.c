@@ -2,7 +2,6 @@
 
 void tiva_alarm_clock()
 {
-
 }
 
 int main(void)
