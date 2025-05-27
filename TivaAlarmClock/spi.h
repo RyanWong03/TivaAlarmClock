@@ -5,9 +5,13 @@
 
 #define SSI2    0x4000A000
 
+#define SSICR0  0x0
 #define SSICR1  0x4
 #define SSIDR   0x8     //SSI Data
 #define SSISR   0xC     //SSI Status
+#define SSICPSR 0x10
+#define SSICC   0xFC8
+
 #define TNF     0x2     //Transit not full
 #define BSY     0x10    //Busy bit
 
