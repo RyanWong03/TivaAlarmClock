@@ -8,6 +8,7 @@
 #include "spi.h"
 #include "gpio.h"
 #include "seven_seg.h"
+#include "timer.h"
 
 #define HWREG(x) (*(volatile uint32_t *)(x))
 
