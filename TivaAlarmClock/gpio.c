@@ -2,5 +2,5 @@
 
 void gpio_port_init(int ports)
 {
-    HWREG(RCGCGPIO) |= (1 << ports);
+    HWREG(RCGCGPIO) |= ports;
 }
