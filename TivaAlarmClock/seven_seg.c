@@ -45,7 +45,7 @@ void seven_seg_display_digit(int display, int digit)
     poll_tx_buffer(SSI2);
 
     //Send the data
-    *(volatile uint16_t *)(SSI2 + SSIDR) = ((digit_value_map[digit] << 8) | display);
+    *(volatile uint16_t *)(SSI2 + SSIDR) = ((digit_value_map[digit] << 8) | (1 << (4 - display)));
 
     poll_transmission_complete(SSI2);
     latch_cs(GPIOPORTC, 7);
