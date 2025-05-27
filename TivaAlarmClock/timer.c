@@ -1,5 +1,9 @@
 #include "main.h"
 
+//Current time (can be changed by the user via LCD).
+int hour = 0;
+int minute = 0;
+
 //Timer arg: Timer number to initialize.
 //Timer value arg: Timer interval value to set to timer (frequency at which it'll interrupt).
 void timer_init(int timer, uint32_t timer_value)
@@ -51,4 +55,14 @@ void timer0a_handler()
 {
     //Clear interrupt.
     HWREG(TIMER0ADDR + GPTMICR) |= 0x1;
+
+    //New hour hits
+    if(minute == 59)
+    {
+        minute = 0;
+        //Midnight hits; New day
+        if(hour == 23) hour = 0;
+        else hour++;
+    }
+    else minute++;
 }
