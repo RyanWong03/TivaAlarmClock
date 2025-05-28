@@ -9,6 +9,7 @@
 #include "gpio.h"
 #include "seven_seg.h"
 #include "timer.h"
+#include "lcd.h"
 
 //Program states
 #define STATE_IDLE          0   //Default "home" state. Displays time and increments time every minute normally. Alarms can go off.
