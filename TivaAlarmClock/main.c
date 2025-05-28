@@ -2,6 +2,8 @@
 
 extern int hour, minute;
 
+int program_state = STATE_IDLE;
+
 void tiva_alarm_clock()
 {
     seven_seg_init();

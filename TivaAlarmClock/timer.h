@@ -13,5 +13,9 @@
 #define GPTMTAILR   0x28
 
 void timer_init(int timer, uint32_t timer_value);
+void modify_hours_tens_place();
+void modify_hours_ones_place();
+void modify_minutes_tens_place();
+void modify_minutes_ones_place();
 
 #endif /* TIMER_H_ */
