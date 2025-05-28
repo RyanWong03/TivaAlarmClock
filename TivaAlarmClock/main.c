@@ -5,6 +5,7 @@ extern int hour, minute;
 void tiva_alarm_clock()
 {
     seven_seg_init();
+    sw1_2_interrupt_init();
 
     //Have 7-seg display 0 o'clock on startup.
     seven_seg_display_digit(1, 0);
