@@ -58,6 +58,7 @@ extern uint32_t __STACK_TOP;
 
 void timer0a_handler();
 void tiva_sw_handler();
+void alice_sw_handler();
 
 //*****************************************************************************
 //
@@ -89,7 +90,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // GPIO Port A
     IntDefaultHandler,                      // GPIO Port B
     IntDefaultHandler,                      // GPIO Port C
-    IntDefaultHandler,                      // GPIO Port D
+    alice_sw_handler,                      // GPIO Port D
     IntDefaultHandler,                      // GPIO Port E
     IntDefaultHandler,                      // UART0 Rx and Tx
     IntDefaultHandler,                      // UART1 Rx and Tx
