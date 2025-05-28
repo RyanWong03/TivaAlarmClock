@@ -35,23 +35,23 @@ void lcd_init()
     //Setup the LCD to start writing to it.
 
     //Use 4-bit mode
-    send_lcd_command(0x33);
-    send_lcd_command(0x32);
+    lcd_send_command(0x33);
+    lcd_send_command(0x32);
 
     //Use 2 line and 5x8 dots.
-    send_lcd_command(0x28);
+    lcd_send_command(0x28);
 
     //Clear display
-    send_lcd_command(0x1);
+    lcd_send_command(0x1);
 
     //Display on; cursor blinking
-    send_lcd_command(0xF);
+    lcd_send_command(0xF);
 
     //Increment cursor after printing (move right)
-    send_lcd_command(0x6);
+    lcd_send_command(0x6);
 }
 
-void send_lcd_command(int command)
+void lcd_send_command(int command)
 {
     unlatch_cs(GPIOPORTC, 6);
 
@@ -113,4 +113,68 @@ void send_lcd_command(int command)
 
     unlatch_cs(GPIOPORTC, 6);
     delay_ms(1);
+}
+
+void lcd_send_data(int data_arg)
+{
+    unlatch_cs(GPIOPORTC, 6);
+
+    //Generate data for higher nibble.
+    int data = data_arg & ~0xF;
+    data |= 0x1;    //Set RS bit.
+    data |= 0x2;    //Set EN bit.
+
+    poll_tx_buffer(SSI2);
+
+    //Send the data
+    *(volatile uint16_t *)(SSI2 + SSIDR) = data;
+
+    poll_transmission_complete(SSI2);
+    latch_cs(GPIOPORTC, 6);
+    //delay_ms(1);
+
+    unlatch_cs(GPIOPORTC, 6);
+    poll_tx_buffer(SSI2);
+
+    //Send same data as before. Clear enable bit this time.
+    data &= ~0x2;
+
+    //Send the data
+    *(volatile uint16_t *)(SSI2 + SSIDR) = data;
+
+    poll_transmission_complete(SSI2);
+    latch_cs(GPIOPORTC, 6);
+    //delay_ms(1);
+
+    //Generate data for lower nibble.
+    unlatch_cs(GPIOPORTC, 6);
+    data = data_arg & ~0xF0;
+    data <<= 4;
+    data |= 0x1;    //Set RS bit.
+    data |= 0x2;    //Set EN bit.
+
+    poll_tx_buffer(SSI2);
+
+    //Send the data
+    *(volatile uint16_t *)(SSI2 + SSIDR) = data;
+
+    poll_transmission_complete(SSI2);
+    latch_cs(GPIOPORTC, 6);
+    //delay_ms(1);
+
+    unlatch_cs(GPIOPORTC, 6);
+    poll_tx_buffer(SSI2);
+
+    //Clear enable bit from data last time around.
+    data &= ~0x2;
+
+    //Send the data
+    *(volatile uint16_t *)(SSI2 + SSIDR) = data;
+
+    poll_transmission_complete(SSI2);
+    latch_cs(GPIOPORTC, 6);
+    //delay_ms(1);
+
+    unlatch_cs(GPIOPORTC, 6);
+    //delay_ms(1);
 }

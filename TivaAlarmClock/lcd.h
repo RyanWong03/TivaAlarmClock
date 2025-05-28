@@ -3,6 +3,7 @@
 
 
 void lcd_init();
-void send_lcd_command(int command);
+void lcd_send_command(int command);
+void lcd_send_data(int data_arg);
 
 #endif /* LCD_H_ */
