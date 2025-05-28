@@ -3,6 +3,7 @@
 
 //Global libraries
 #include <stdint.h>
+#include <string.h>
 
 //Custom local libraries
 #include "spi.h"

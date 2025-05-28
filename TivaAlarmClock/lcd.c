@@ -44,8 +44,8 @@ void lcd_init()
     //Clear display
     lcd_send_command(0x1);
 
-    //Display on; cursor blinking
-    lcd_send_command(0xF);
+    //Display on; no cursor blinking
+    lcd_send_command(0xE);
 
     //Increment cursor after printing (move right)
     lcd_send_command(0x6);
@@ -131,7 +131,6 @@ void lcd_send_data(int data_arg)
 
     poll_transmission_complete(SSI2);
     latch_cs(GPIOPORTC, 6);
-    //delay_ms(1);
 
     unlatch_cs(GPIOPORTC, 6);
     poll_tx_buffer(SSI2);
@@ -144,7 +143,6 @@ void lcd_send_data(int data_arg)
 
     poll_transmission_complete(SSI2);
     latch_cs(GPIOPORTC, 6);
-    //delay_ms(1);
 
     //Generate data for lower nibble.
     unlatch_cs(GPIOPORTC, 6);
@@ -160,7 +158,6 @@ void lcd_send_data(int data_arg)
 
     poll_transmission_complete(SSI2);
     latch_cs(GPIOPORTC, 6);
-    //delay_ms(1);
 
     unlatch_cs(GPIOPORTC, 6);
     poll_tx_buffer(SSI2);
@@ -173,8 +170,25 @@ void lcd_send_data(int data_arg)
 
     poll_transmission_complete(SSI2);
     latch_cs(GPIOPORTC, 6);
-    //delay_ms(1);
 
     unlatch_cs(GPIOPORTC, 6);
-    //delay_ms(1);
+}
+
+void lcd_display_menu()
+{
+    char *change_time_str = ">Change Time    ";
+    int i;
+    for(i = 0; i < strlen(change_time_str); i++)
+    {
+        lcd_send_data(change_time_str[i]);
+    }
+
+    //Force cursor to beginning of second line
+    lcd_send_command(0xC0);
+
+    char *alarm_settings_str = ">Alarm Settings    ";
+    for(i = 0; i < strlen(alarm_settings_str); i++)
+    {
+        lcd_send_data(alarm_settings_str[i]);
+    }
 }

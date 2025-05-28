@@ -17,6 +17,8 @@ void tiva_alarm_clock()
     seven_seg_display_digit(3, 0);
     seven_seg_display_digit(4, 0);
 
+    lcd_display_menu();
+
     //Interrupt every minute.
     //Minute = 0x39387000
     //second = 0xF42400
