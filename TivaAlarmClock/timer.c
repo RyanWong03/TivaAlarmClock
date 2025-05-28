@@ -1,5 +1,7 @@
 #include "main.h"
 
+extern int program_state;
+
 //Current time (can be changed by the user via LCD).
 int hour = 0;
 int minute = 0;
@@ -56,6 +58,8 @@ void timer0a_handler()
     //Clear interrupt.
     HWREG(TIMER0ADDR + GPTMICR) |= 0x1;
 
+    if(program_state == STATE_CHANGING_TIME) return;
+
     //New hour hits
     if(minute == 59)
     {
@@ -64,5 +68,30 @@ void timer0a_handler()
         if(hour == 23) hour = 0;
         else hour++;
     }
+    else minute++;
+}
+
+void modify_hours_tens_place()
+{
+    if((hour / 10) >= 2) hour %= 10;
+    else hour += 10;
+}
+
+void modify_hours_ones_place()
+{
+    if(hour >= 23) hour = 20;
+    else if((hour % 10) >= 9) hour -= (hour % 10);
+    else hour++;
+}
+
+void modify_minutes_tens_place()
+{
+    if((minute / 10) >= 5) minute %= 10;
+    else minute += 10;
+}
+
+void modify_minutes_ones_place()
+{
+    if((minute % 10) >= 9) minute -= (minute % 10);
     else minute++;
 }
