@@ -2,6 +2,9 @@
 
 extern int program_state;
 
+//This is the row on the LCD that the user is currently on. If they press SW2 on Tiva, they select this option.
+int lcd_row_select = 1;
+
 void gpio_port_init(int ports)
 {
     HWREG(RCGCGPIO) |= ports;
@@ -63,7 +66,14 @@ void tiva_sw_handler()
     //SW1 will be used to navigate through the LCD menu.
     //SW2 will be used to make the selection.
 
-    //For now, we'll only have one option on the LCD menu. Change time option.
+    //SW1 is pin 4.
+    if(button_pressed == 0x10 && lcd_row_select == 1)
+    {
+        //Move LCD cursor to beginning of first row.
+        lcd_send_command(0x80);
+        lcd_send_data(0x20);    //Write a space
+
+    }
 
     //SW2 is pin 0.
     if(button_pressed == 0x1 && program_state == STATE_IDLE) program_state = STATE_CHANGING_TIME;

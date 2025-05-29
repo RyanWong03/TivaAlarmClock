@@ -186,7 +186,7 @@ void lcd_display_menu()
     //Force cursor to beginning of second line
     lcd_send_command(0xC0);
 
-    char *alarm_settings_str = ">Alarm Settings    ";
+    char *alarm_settings_str = " Alarm Settings    ";
     for(i = 0; i < strlen(alarm_settings_str); i++)
     {
         lcd_send_data(alarm_settings_str[i]);
