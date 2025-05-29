@@ -73,6 +73,33 @@ void tiva_sw_handler()
         lcd_send_command(0x80);
         lcd_send_data(0x20);    //Write a space
 
+        //Move LCD cursor to beginning of second row.
+        lcd_send_command(0xC0);
+        char *alarm_settings_str = ">Alarm Settings    ";
+        int i;
+        for(i = 0; i < strlen(alarm_settings_str); i++)
+        {
+            lcd_send_data(alarm_settings_str[i]);
+        }
+
+        lcd_row_select = 2;
+    }
+    else if(button_pressed == 0x10 && lcd_row_select == 2)
+    {
+        //Move LCD cursor to beginning of second row.
+        lcd_send_command(0xC0);
+        lcd_send_data(0x20);    //Write a space
+
+        //Move LCD cursor to beginning of first row.
+        lcd_send_command(0x80);
+        char *change_time_str = ">Change Time    ";
+        int i;
+        for(i = 0; i < strlen(change_time_str); i++)
+        {
+            lcd_send_data(change_time_str[i]);
+        }
+
+        lcd_row_select = 1;
     }
 
     //SW2 is pin 0.

@@ -131,6 +131,7 @@ void lcd_send_data(int data_arg)
 
     poll_transmission_complete(SSI2);
     latch_cs(GPIOPORTC, 6);
+    delay_ms(1);
 
     unlatch_cs(GPIOPORTC, 6);
     poll_tx_buffer(SSI2);
@@ -143,6 +144,7 @@ void lcd_send_data(int data_arg)
 
     poll_transmission_complete(SSI2);
     latch_cs(GPIOPORTC, 6);
+    delay_ms(1);
 
     //Generate data for lower nibble.
     unlatch_cs(GPIOPORTC, 6);
@@ -158,6 +160,7 @@ void lcd_send_data(int data_arg)
 
     poll_transmission_complete(SSI2);
     latch_cs(GPIOPORTC, 6);
+    delay_ms(1);
 
     unlatch_cs(GPIOPORTC, 6);
     poll_tx_buffer(SSI2);
@@ -170,8 +173,10 @@ void lcd_send_data(int data_arg)
 
     poll_transmission_complete(SSI2);
     latch_cs(GPIOPORTC, 6);
+    delay_ms(1);
 
     unlatch_cs(GPIOPORTC, 6);
+    delay_ms(1);
 }
 
 void lcd_display_menu()
