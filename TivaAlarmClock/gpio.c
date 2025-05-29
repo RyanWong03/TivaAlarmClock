@@ -1,6 +1,6 @@
 #include "main.h"
 
-extern int program_state;
+extern int program_state, hour, minute;
 
 //This is the row on the LCD that the user is currently on. If they press SW2 on Tiva, they select this option.
 int lcd_row_select = 1;
@@ -165,13 +165,20 @@ void handle_sw2_press()
         {
             lcd_send_command(LCD_CLEAR_DISPLAY);
             char *confirm_time_str = ">Confirm Time       ";
-
+            lcd_output_string(confirm_time_str);
+            char *cancel_str = " Cancel          ";
+            lcd_output_string(cancel_str);
             program_state = STATE_CHANGING_TIME;
         }
     }
     else if(program_state == STATE_CHANGING_TIME)
     {
+        if(lcd_row_select == 1)
+        {
+            lcd_display_menu();
+        }
         program_state = STATE_IDLE;
+
         //Restart timer here basically so it's in sync with real-world clock.
         timer_init(0, 0x39387000);
     }
