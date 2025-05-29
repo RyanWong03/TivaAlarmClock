@@ -5,6 +5,8 @@ extern int program_state;
 //Current time (can be changed by the user via LCD).
 int hour = 0;
 int minute = 0;
+int old_hour = 0;
+int old_minute = 0;
 
 //Timer arg: Timer number to initialize.
 //Timer value arg: Timer interval value to set to timer (frequency at which it'll interrupt).

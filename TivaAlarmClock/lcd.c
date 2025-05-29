@@ -189,6 +189,8 @@ void lcd_output_string(char *str)
 
 void lcd_display_menu()
 {
+    lcd_send_command(LCD_CLEAR_DISPLAY);
+
     char *change_time_str = ">Change Time    ";
     lcd_output_string(change_time_str);
 
