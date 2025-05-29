@@ -69,12 +69,10 @@ void tiva_sw_handler()
     //SW1 is pin 4.
     if(button_pressed == 0x10 && lcd_row_select == 1)
     {
-        //Move LCD cursor to beginning of first row.
-        lcd_send_command(0x80);
-        lcd_send_data(0x20);    //Write a space
+        lcd_send_command(LCD_CURSOR_BEGINNING_FIRST_ROW);
+        lcd_send_data(' ');
+        lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
 
-        //Move LCD cursor to beginning of second row.
-        lcd_send_command(0xC0);
         char *alarm_settings_str = ">Alarm Settings    ";
         int i;
         for(i = 0; i < strlen(alarm_settings_str); i++)
@@ -86,12 +84,10 @@ void tiva_sw_handler()
     }
     else if(button_pressed == 0x10 && lcd_row_select == 2)
     {
-        //Move LCD cursor to beginning of second row.
-        lcd_send_command(0xC0);
-        lcd_send_data(0x20);    //Write a space
+        lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
+        lcd_send_data(' ');
+        lcd_send_command(LCD_CURSOR_BEGINNING_FIRST_ROW);
 
-        //Move LCD cursor to beginning of first row.
-        lcd_send_command(0x80);
         char *change_time_str = ">Change Time    ";
         int i;
         for(i = 0; i < strlen(change_time_str); i++)
@@ -103,7 +99,13 @@ void tiva_sw_handler()
     }
 
     //SW2 is pin 0.
-    if(button_pressed == 0x1 && program_state == STATE_IDLE) program_state = STATE_CHANGING_TIME;
+    if(button_pressed == 0x1 && program_state == STATE_IDLE)
+    {
+        if(lcd_row_select == 1)
+        {
+            program_state = STATE_CHANGING_TIME;
+        }
+    }
     else if(button_pressed == 0x1 && program_state == STATE_CHANGING_TIME)
     {
         program_state = STATE_IDLE;

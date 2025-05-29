@@ -35,20 +35,20 @@ void lcd_init()
     //Setup the LCD to start writing to it.
 
     //Use 4-bit mode
-    lcd_send_command(0x33);
-    lcd_send_command(0x32);
+    lcd_send_command(LCD_4_BIT_MODE_1);
+    lcd_send_command(LCD_4_BIT_MODE_2);
 
     //Use 2 line and 5x8 dots.
-    lcd_send_command(0x28);
+    lcd_send_command(LCD_2_LINES_5X8_DOTS);
 
     //Clear display
-    lcd_send_command(0x1);
+    lcd_send_command(LCD_CLEAR_DISPLAY);
 
     //Display on; no cursor blinking
-    lcd_send_command(0xE);
+    lcd_send_command(LCD_DISPLAY_ON_CURSOR_NO_BLINK);
 
     //Increment cursor after printing (move right)
-    lcd_send_command(0x6);
+    lcd_send_command(LCD_INCREMENT_MODE);
 }
 
 void lcd_send_command(int command)
@@ -188,8 +188,8 @@ void lcd_display_menu()
         lcd_send_data(change_time_str[i]);
     }
 
-    //Force cursor to beginning of second line
-    lcd_send_command(0xC0);
+    //Force cursor to beginning of second row
+    lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
 
     char *alarm_settings_str = " Alarm Settings    ";
     for(i = 0; i < strlen(alarm_settings_str); i++)

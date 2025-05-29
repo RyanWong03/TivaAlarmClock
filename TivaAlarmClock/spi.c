@@ -7,10 +7,9 @@ void spi_module_init(int module)
 
 void delay_ms(int ms)
 {
-    //The system clock is 80 MHz. A NOP takes 1 cycle which is 12.5 nanoseconds.
-    //It takes 80000 NOPs to make 1 millisecond with that math.
+    //16 MHz system clock, go with 16k NOPs.
     int i;
-    for(i = 0; i < ms * 80000; i++)
+    for(i = 0; i < ms * 16000; i++)
     {
         __asm("     NOP");
     }
