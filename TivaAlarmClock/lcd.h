@@ -1,12 +1,6 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-
-void lcd_init();
-void lcd_send_command(int command);
-void lcd_send_data(int data_arg);
-void lcd_display_menu();
-
 //LCD commands
 #define LCD_4_BIT_MODE_1                0x33
 #define LCD_4_BIT_MODE_2                0x32
@@ -20,5 +14,11 @@ void lcd_display_menu();
 #define LCD_CURSOR_LEFT                 0x10
 #define LCD_DECREMENT_MODE              0x4     //Cursor moves to left after character is printed
 #define LCD_INCREMENT_MODE              0x6     //Cursor moves to right after character is printed
+
+void lcd_init();
+void lcd_send_command(int command);
+void lcd_send_data(int data_arg);
+void lcd_display_menu();
+void lcd_output_string(char *str);
 
 #endif /* LCD_H_ */

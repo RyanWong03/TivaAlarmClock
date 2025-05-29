@@ -179,21 +179,22 @@ void lcd_send_data(int data_arg)
     delay_ms(1);
 }
 
+void lcd_output_string(char *str)
+{
+    while(*str != 0x0)
+    {
+        lcd_send_data(*str++);
+    }
+}
+
 void lcd_display_menu()
 {
     char *change_time_str = ">Change Time    ";
-    int i;
-    for(i = 0; i < strlen(change_time_str); i++)
-    {
-        lcd_send_data(change_time_str[i]);
-    }
+    lcd_output_string(change_time_str);
 
     //Force cursor to beginning of second row
     lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
 
     char *alarm_settings_str = " Alarm Settings    ";
-    for(i = 0; i < strlen(alarm_settings_str); i++)
-    {
-        lcd_send_data(alarm_settings_str[i]);
-    }
+    lcd_output_string(alarm_settings_str);
 }

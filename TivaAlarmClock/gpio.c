@@ -66,52 +66,9 @@ void tiva_sw_handler()
     //SW1 will be used to navigate through the LCD menu.
     //SW2 will be used to make the selection.
 
-    //SW1 is pin 4.
-    if(button_pressed == 0x10 && lcd_row_select == 1)
-    {
-        lcd_send_command(LCD_CURSOR_BEGINNING_FIRST_ROW);
-        lcd_send_data(' ');
-        lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
-
-        char *alarm_settings_str = ">Alarm Settings    ";
-        int i;
-        for(i = 0; i < strlen(alarm_settings_str); i++)
-        {
-            lcd_send_data(alarm_settings_str[i]);
-        }
-
-        lcd_row_select = 2;
-    }
-    else if(button_pressed == 0x10 && lcd_row_select == 2)
-    {
-        lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
-        lcd_send_data(' ');
-        lcd_send_command(LCD_CURSOR_BEGINNING_FIRST_ROW);
-
-        char *change_time_str = ">Change Time    ";
-        int i;
-        for(i = 0; i < strlen(change_time_str); i++)
-        {
-            lcd_send_data(change_time_str[i]);
-        }
-
-        lcd_row_select = 1;
-    }
-
-    //SW2 is pin 0.
-    if(button_pressed == 0x1 && program_state == STATE_IDLE)
-    {
-        if(lcd_row_select == 1)
-        {
-            program_state = STATE_CHANGING_TIME;
-        }
-    }
-    else if(button_pressed == 0x1 && program_state == STATE_CHANGING_TIME)
-    {
-        program_state = STATE_IDLE;
-        //Restart timer here basically so it's in sync with real-world clock.
-        timer_init(0, 0x39387000);
-    }
+    //SW1 is pin 4. SW2 is pin 0. Let's only allow one button press, won't deal with both being pressed at same time.
+    if(button_pressed == 0x10) handle_sw1_press();
+    else if(button_pressed == 0x1) handle_sw2_press();
 }
 
 void alice_sw_handler()
@@ -173,5 +130,49 @@ void alice_sw_handler()
         break;
     default:
         break;
+    }
+}
+
+void handle_sw1_press()
+{
+    if(lcd_row_select == 1)
+    {
+        lcd_send_command(LCD_CURSOR_BEGINNING_FIRST_ROW);
+        lcd_send_data(' ');
+        lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
+
+        char *alarm_settings_str = ">Alarm Settings    ";
+        lcd_output_string(alarm_settings_str);
+        lcd_row_select = 2;
+    }
+    else if(lcd_row_select == 2)
+    {
+        lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
+        lcd_send_data(' ');
+        lcd_send_command(LCD_CURSOR_BEGINNING_FIRST_ROW);
+
+        char *change_time_str = ">Change Time    ";
+        lcd_output_string(change_time_str);
+        lcd_row_select = 1;
+    }
+}
+
+void handle_sw2_press()
+{
+    if(program_state == STATE_IDLE)
+    {
+        if(lcd_row_select == 1)
+        {
+            lcd_send_command(LCD_CLEAR_DISPLAY);
+            char *confirm_time_str = ">Confirm Time       ";
+
+            program_state = STATE_CHANGING_TIME;
+        }
+    }
+    else if(program_state == STATE_CHANGING_TIME)
+    {
+        program_state = STATE_IDLE;
+        //Restart timer here basically so it's in sync with real-world clock.
+        timer_init(0, 0x39387000);
     }
 }

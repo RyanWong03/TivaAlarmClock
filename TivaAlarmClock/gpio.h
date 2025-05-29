@@ -31,5 +31,7 @@
 void gpio_port_init(int ports);
 void sw1_2_interrupt_init();
 void sw2_5_interrupt_init();
+void handle_sw1_press();
+void handle_sw2_press();
 
 #endif /* GPIO_H_ */
