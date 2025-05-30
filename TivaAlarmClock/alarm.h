@@ -19,5 +19,7 @@ void clear_alarms();
 void alarm_add(int8_t hour, int8_t minute);
 void alarm_delete(int alarm_index);
 void alarm_update(alarm_time *alarm, int8_t hour, int8_t minute);
+int compare_alarms(const void *alarm1, const void *alarm2);
+void alarm_sort();
 
 #endif /* ALARM_H_ */

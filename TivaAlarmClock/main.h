@@ -4,6 +4,7 @@
 //Global libraries
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 //Custom local libraries
 #include "spi.h"

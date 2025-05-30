@@ -68,3 +68,26 @@ void clear_alarms()
 
     num_alarms = 0;
 }
+
+//Sorts all alarms so they are in increasing order by time.
+void alarm_sort()
+{
+    qsort(alarms, num_alarms, sizeof(alarm_time), compare_alarms);
+
+    int i;
+    for(i = 0; i < num_alarms; i++)
+    {
+        alarms[i].index = i;
+    }
+
+}
+
+int compare_alarms(const void *alarm1, const void *alarm2)
+{
+    alarm_time *alarm_time_1 = (alarm_time*) alarm1;
+    alarm_time *alarm_time_2 = (alarm_time*) alarm2;
+
+    if(alarm_time_1 -> hour != alarm_time_2 -> hour) return alarm_time_1 -> hour - alarm_time_2 -> hour;
+
+    return alarm_time_1 -> minute - alarm_time_2 -> minute;
+}
