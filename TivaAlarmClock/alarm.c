@@ -16,11 +16,11 @@ void alarm_add(int8_t hour, int8_t minute)
     num_alarms++;
 }
 
-void alarm_delete(alarm_time alarm)
+void alarm_delete(int alarm_index)
 {
     //This loop terminates immediately if we're deleting the last alarm. This eliminates possibility of some memory thing with bounds.
     int i;
-    for(i = alarm.index; i < num_alarms - 1; i++)
+    for(i = alarm_index; i < num_alarms - 1; i++)
     {
         alarms[i] = alarms[i + 1];
     }
@@ -36,9 +36,10 @@ void alarm_delete(alarm_time alarm)
     }
 }
 
-void alarm_update(alarm_time alarm, int8_t hour, int8_t minute)
+void alarm_update(alarm_time *alarm, int8_t hour, int8_t minute)
 {
-
+    alarm -> hour = hour;
+    alarm -> minute = minute;
 }
 
 bool alarm_time_exists(int8_t hour, int8_t minute)
