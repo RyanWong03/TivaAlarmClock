@@ -9,6 +9,13 @@ void tiva_alarm_clock()
     seven_seg_init();
     sw1_2_interrupt_init();
     sw2_5_interrupt_init();
+    clear_alarms();
+    alarm_add(15, 30);
+    alarm_add(15, 30);
+    alarm_add(10, 8);
+    alarm_add(5, 3);
+    alarm_add(0, 0);
+    alarm_delete(alarms[2]);
 
     //Have 7-seg display 0 o'clock on startup.
     seven_seg_display_digit(1, 0);

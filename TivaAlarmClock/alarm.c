@@ -1,0 +1,69 @@
+#include "main.h"
+
+void alarm_add(int8_t hour, int8_t minute)
+{
+    //Have LCD display something like time exists already.
+    if(alarm_time_exists(hour, minute)) return;
+
+    //Have LCD display something like max alarm limit reached.
+    if(num_alarms == MAX_ALARMS) return;
+
+    alarm_time alarm;
+    alarm.hour = hour;
+    alarm.minute = minute;
+    alarm.index = num_alarms;
+    alarms[num_alarms] = alarm;
+    num_alarms++;
+}
+
+void alarm_delete(alarm_time alarm)
+{
+    //This loop terminates immediately if we're deleting the last alarm. This eliminates possibility of some memory thing with bounds.
+    int i;
+    for(i = alarm.index; i < num_alarms - 1; i++)
+    {
+        alarms[i] = alarms[i + 1];
+    }
+
+    //Clear out rest of the alarms.
+    for(i = num_alarms - 1; i < MAX_ALARMS; i++)
+    {
+        alarm_time empty_alarm;
+        empty_alarm.hour = -1;
+        empty_alarm.minute = -1;
+        empty_alarm.index = -1;
+        alarms[i] = empty_alarm;
+    }
+}
+
+void alarm_update(alarm_time alarm, int8_t hour, int8_t minute)
+{
+
+}
+
+bool alarm_time_exists(int8_t hour, int8_t minute)
+{
+    int i;
+    for(i = 0; i < num_alarms; i++)
+    {
+        if(alarms[i].hour == hour && alarms[i].minute == minute) return true;
+    }
+
+    return false;
+}
+
+void clear_alarms()
+{
+    alarm_time empty_alarm;
+    empty_alarm.hour = -1;
+    empty_alarm.minute = -1;
+    empty_alarm.index = -1;
+
+    int i;
+    for(i = 0; i < MAX_ALARMS; i++)
+    {
+        alarms[i] = empty_alarm;
+    }
+
+    num_alarms = 0;
+}
