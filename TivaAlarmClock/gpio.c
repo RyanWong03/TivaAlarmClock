@@ -201,6 +201,17 @@ void handle_sw2_press()
             lcd_output_string(cancel_str);
             program_state = STATE_CHANGING_TIME;
         }
+//        else if(lcd_row_select == 2)
+//        {
+//            //User is modifying alarm times here.
+//            lcd_send_command(LCD_CLEAR_DISPLAY);
+//            char *view_alarm_times_str = ">Alarm Times      ";
+//            lcd_output_string(view_alarm_times_str);
+//            lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
+//            char *add_alarm_time_str = " Add Alarm Time     ";
+//            lcd_output_string(add_alarm_time_str);
+//            program_state = STATE_ALARM_SETTINGS;
+//        }
     }
     else if(program_state == STATE_CHANGING_TIME)
     {
@@ -228,4 +239,15 @@ void handle_sw2_press()
         lcd_display_menu();
         program_state = STATE_IDLE;
     }
+//    else if(program_state == STATE_ALARM_SETTINGS)
+//    {
+//        if(lcd_row_select == 1)
+//        {
+//
+//        }
+//        else if(lcd_row_select == 2)
+//        {
+//
+//        }
+//    }
 }
