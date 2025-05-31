@@ -15,6 +15,7 @@
 #include "lcd.h"
 #include "alarm.h"
 #include "eeprom.h"
+#include "i2c.h"
 
 //Program states
 #define STATE_IDLE              0   //Default "home" state. Displays time and increments time every minute normally. Alarms can go off.

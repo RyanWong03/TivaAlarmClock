@@ -10,6 +10,7 @@ void tiva_alarm_clock()
     lcd_init();
     sw1_2_interrupt_init();
     sw2_5_interrupt_init();
+    i2c1_init();
     clear_alarms();
 
     if(eeprom_init() != 0) return;
