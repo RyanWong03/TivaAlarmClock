@@ -7,6 +7,7 @@ int program_state = STATE_IDLE;
 void tiva_alarm_clock()
 {
     seven_seg_init();
+    lcd_init();
     sw1_2_interrupt_init();
     sw2_5_interrupt_init();
     clear_alarms();
@@ -20,6 +21,8 @@ void tiva_alarm_clock()
     seven_seg_display_digit(2, 0);
     seven_seg_display_digit(3, 0);
     seven_seg_display_digit(4, 0);
+
+    lcd_display_menu();
 
     //Interrupt every minute.
     //Minute = 0x39387000

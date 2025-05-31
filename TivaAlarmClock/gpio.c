@@ -1,6 +1,9 @@
 #include "main.h"
 
-extern int program_state;
+extern int program_state, hour, minute, old_hour, old_minute;
+
+//This is the row on the LCD that the user is currently on. If they press SW2 on Tiva, they select this option.
+int lcd_row_select = 1;
 
 void gpio_port_init(int ports)
 {
@@ -63,16 +66,9 @@ void tiva_sw_handler()
     //SW1 will be used to navigate through the LCD menu.
     //SW2 will be used to make the selection.
 
-    //For now, we'll only have one option on the LCD menu. Change time option.
-
-    //SW2 is pin 0.
-    if(button_pressed == 0x1 && program_state == STATE_IDLE) program_state = STATE_CHANGING_TIME;
-    else if(button_pressed == 0x1 && program_state == STATE_CHANGING_TIME)
-    {
-        program_state = STATE_IDLE;
-        //Restart timer here basically so it's in sync with real-world clock.
-        timer_init(0, 0x39387000);
-    }
+    //SW1 is pin 4. SW2 is pin 0. Let's only allow one button press, won't deal with both being pressed at same time.
+    if(button_pressed == 0x10) handle_sw1_press();
+    else if(button_pressed == 0x1) handle_sw2_press();
 }
 
 void alice_sw_handler()
@@ -135,4 +131,123 @@ void alice_sw_handler()
     default:
         break;
     }
+}
+
+void handle_sw1_press()
+{
+    if(program_state == STATE_IDLE)
+    {
+        if(lcd_row_select == 1)
+        {
+            lcd_send_command(LCD_CURSOR_BEGINNING_FIRST_ROW);
+            lcd_send_data(' ');
+            lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
+
+            char *alarm_settings_str = ">Alarm Settings    ";
+            lcd_output_string(alarm_settings_str);
+            lcd_row_select = 2;
+        }
+        else if(lcd_row_select == 2)
+        {
+            lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
+            lcd_send_data(' ');
+            lcd_send_command(LCD_CURSOR_BEGINNING_FIRST_ROW);
+
+            char *change_time_str = ">Change Time    ";
+            lcd_output_string(change_time_str);
+            lcd_row_select = 1;
+        }
+    }
+    else if(program_state == STATE_CHANGING_TIME)
+    {
+        if(lcd_row_select == 1)
+        {
+            lcd_send_command(LCD_CURSOR_BEGINNING_FIRST_ROW);
+            lcd_send_data(' ');
+            lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
+
+            char *cancel_str = ">Cancel           ";
+            lcd_output_string(cancel_str);
+            lcd_row_select = 2;
+        }
+        else if(lcd_row_select == 2)
+        {
+            lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
+            lcd_send_data(' ');
+            lcd_send_command(LCD_CURSOR_BEGINNING_FIRST_ROW);
+
+            char *confirm_time_str = ">Confirm Time       ";
+            lcd_output_string(confirm_time_str);
+            lcd_row_select = 1;
+        }
+    }
+
+}
+
+void handle_sw2_press()
+{
+    if(program_state == STATE_IDLE)
+    {
+        if(lcd_row_select == 1)
+        {
+            //Keep track of current time until user actually confirms the new time.
+            old_hour = hour;
+            old_minute = minute;
+            lcd_send_command(LCD_CLEAR_DISPLAY);
+            char *confirm_time_str = ">Confirm Time       ";
+            lcd_output_string(confirm_time_str);
+            lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
+            char *cancel_str = " Cancel          ";
+            lcd_output_string(cancel_str);
+            program_state = STATE_CHANGING_TIME;
+        }
+//        else if(lcd_row_select == 2)
+//        {
+//            //User is modifying alarm times here.
+//            lcd_send_command(LCD_CLEAR_DISPLAY);
+//            char *view_alarm_times_str = ">Alarm Times      ";
+//            lcd_output_string(view_alarm_times_str);
+//            lcd_send_command(LCD_CURSOR_BEGINNING_SECOND_ROW);
+//            char *add_alarm_time_str = " Add Alarm Time     ";
+//            lcd_output_string(add_alarm_time_str);
+//            program_state = STATE_ALARM_SETTINGS;
+//        }
+    }
+    else if(program_state == STATE_CHANGING_TIME)
+    {
+        //Confirm time change
+        if(lcd_row_select == 1)
+        {
+            //Set old hour and old minute to new time for next time user wants to change time.
+            old_hour = hour;
+            old_minute = minute;
+
+            //Restart timer here basically so it's in sync with real-world clock.
+            timer_init(0, 0x39387000);
+        }
+        //Cancel time change
+        else if(lcd_row_select == 2)
+        {
+            //Revert time back to what it was prior to entering time change menu.
+            hour = old_hour;
+            minute = old_minute;
+
+            //NOTE:
+            //Unlike when the user confirms the time change, when they cancel it, don't reset the timer value.
+            //Keep it as normal so we can continue the time as normal.
+        }
+        lcd_display_menu();
+        program_state = STATE_IDLE;
+    }
+//    else if(program_state == STATE_ALARM_SETTINGS)
+//    {
+//        if(lcd_row_select == 1)
+//        {
+//
+//        }
+//        else if(lcd_row_select == 2)
+//        {
+//
+//        }
+//    }
 }
