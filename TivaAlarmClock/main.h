@@ -4,6 +4,8 @@
 //Global libraries
 #include <stdint.h>
 #include <string.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
 //Custom local libraries
 #include "spi.h"
@@ -11,6 +13,8 @@
 #include "seven_seg.h"
 #include "timer.h"
 #include "lcd.h"
+#include "alarm.h"
+#include "eeprom.h"
 
 //Program states
 #define STATE_IDLE              0   //Default "home" state. Displays time and increments time every minute normally. Alarms can go off.
