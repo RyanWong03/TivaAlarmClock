@@ -3,16 +3,17 @@
 void alarm_add(int8_t hour, int8_t minute)
 {
     //Have LCD display something like time exists already.
-    if(alarm_time_exists(hour, minute)) return;
+    //if(alarm_time_exists(hour, minute)) return;
 
     //Have LCD display something like max alarm limit reached.
-    if(num_alarms == MAX_ALARMS) return;
+    //if(num_alarms == MAX_ALARMS) return;
 
     alarm_time alarm;
     alarm.hour = hour;
     alarm.minute = minute;
     alarm.index = num_alarms;
     alarms[num_alarms] = alarm;
+    eeprom_write(alarm, 0, num_alarms);
     num_alarms++;
 }
 
@@ -42,13 +43,12 @@ void alarm_update(alarm_time *alarm, int8_t hour, int8_t minute)
     alarm -> minute = minute;
 }
 
-bool alarm_time_exists(int8_t hour, int8_t minute)
+bool alarm_time_exists(int8_t hour, int8_t minute, uint16_t block, uint8_t offset)
 {
-    int i;
-    for(i = 0; i < num_alarms; i++)
-    {
-        if(alarms[i].hour == hour && alarms[i].minute == minute) return true;
-    }
+    uint32_t alarm = eeprom_read(block, offset);
+    int8_t hour_read = alarm & 0xFF;
+    int8_t min_read = alarm & (0xFF < 8);
+    if(hour_read == hour && min_read == minute) return true;
 
     return false;
 }
@@ -90,4 +90,13 @@ int compare_alarms(const void *alarm1, const void *alarm2)
     if(alarm_time_1 -> hour != alarm_time_2 -> hour) return alarm_time_1 -> hour - alarm_time_2 -> hour;
 
     return alarm_time_1 -> minute - alarm_time_2 -> minute;
+}
+
+void add_default_alarms()
+{
+    alarm_add(8, 0);
+    alarm_add(9, 0);
+    alarm_add(10, 0);
+    alarm_add(10, 30);
+    alarm_add(11, 0);
 }
