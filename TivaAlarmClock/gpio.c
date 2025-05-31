@@ -186,6 +186,12 @@ void handle_sw1_press()
 
 void handle_sw2_press()
 {
+    if(alarm_sound_on == true)
+    {
+        alarm_sound_on = false;
+        return;
+    }
+
     if(program_state == STATE_IDLE)
     {
         if(lcd_row_select == 1)

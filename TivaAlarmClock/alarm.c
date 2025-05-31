@@ -100,3 +100,15 @@ void add_default_alarms()
     alarm_add(10, 30);
     alarm_add(11, 0);
 }
+
+//This plays the alarm sound from buzzer.
+void alarm_trigger()
+{
+    while(alarm_sound_on == true)
+    {
+        dac_send(4095);
+        delay_ms(0.5);
+        dac_send(0);
+        delay_ms(0.5);
+    }
+}

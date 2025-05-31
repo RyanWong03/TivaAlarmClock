@@ -71,6 +71,13 @@ void timer0a_handler()
         else hour++;
     }
     else minute++;
+
+    //Check if any of the preset alarm times have been hit.
+    if(hour == 8 && minute == 0) alarm_sound_on = true;
+    else if(hour == 9 && minute == 0) alarm_sound_on = true;
+    else if(hour == 10 && minute == 0) alarm_sound_on = true;
+    else if(hour == 10 && minute == 30) alarm_sound_on = true;
+    else if(hour == 11 && minute == 0) alarm_sound_on = true;
 }
 
 void modify_hours_tens_place()
