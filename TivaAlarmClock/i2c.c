@@ -14,3 +14,13 @@ void i2c1_init()
     *(volatile uint8_t *)(I2C1BASE + I2CMCR) = 0x10;    //I2C1 is master. Enable loopback mode as well for debugging.
     *(volatile uint8_t *)(I2C1BASE + I2CMTPR) = 0x7;    //Clock speed = 100kbps.
 }
+
+void i2c_check_busy_bit()
+{
+    while((HWREG(I2C1BASE + I2CMCS) & 0x40) == 1) {}
+}
+
+void i2c_check_error_bit()
+{
+    while((HWREG(I2C1BASE + I2CMCS) & 0x2) == 1) {}
+}

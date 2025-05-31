@@ -22,5 +22,6 @@ void alarm_update(alarm_time *alarm, int8_t hour, int8_t minute);
 int compare_alarms(const void *alarm1, const void *alarm2);
 void alarm_sort();
 void add_default_alarms();
+void alarm_trigger();
 
 #endif /* ALARM_H_ */

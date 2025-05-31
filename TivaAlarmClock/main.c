@@ -11,9 +11,12 @@ void tiva_alarm_clock()
     sw1_2_interrupt_init();
     sw2_5_interrupt_init();
     i2c1_init();
+
     clear_alarms();
 
     if(eeprom_init() != 0) return;
+
+    alarm_sound_on = false;
 
     //add_default_alarms(); //This is for writing alarms to EEPROM.
 
@@ -37,6 +40,7 @@ void tiva_alarm_clock()
         seven_seg_display_digit(2, hour % 10);
         seven_seg_display_digit(3, minute / 10);
         seven_seg_display_digit(4, minute % 10);
+        alarm_trigger();
     }
 }
 
