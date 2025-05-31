@@ -9,6 +9,11 @@ void tiva_alarm_clock()
     seven_seg_init();
     sw1_2_interrupt_init();
     sw2_5_interrupt_init();
+    clear_alarms();
+
+    if(eeprom_init() != 0) return;
+
+    //add_default_alarms(); //This is for writing alarms to EEPROM.
 
     //Have 7-seg display 0 o'clock on startup.
     seven_seg_display_digit(1, 0);
